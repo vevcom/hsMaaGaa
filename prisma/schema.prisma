@@ -1,0 +1,14 @@
+model Call {
+    distance Int
+    timestamp DateTime @id @default(now())
+    username String
+    user User @relation(fields: [username], references: [username])
+}
+
+model User {
+    username String @id
+    name String 
+    rfid String 
+    calls Call[]
+
+}
