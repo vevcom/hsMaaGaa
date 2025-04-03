@@ -1,14 +1,24 @@
+@import url('https://fonts.googleapis.com/css?family=Yarndings%2020%20Charted:700|Yarndings%2020%20Charted:400');
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f3f5f7;
+  --background-accent: #e7e9ea;
+  --foreground: #0a0d10;
+  --primary: #1873fb;
+  --secondary: #c6a9b9;
+  --accent: #ec7e54;
 }
 
-@media (prefers-color-scheme: dark) {
+/* @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #080a0c;
+    --background-accent: #151618;
+    --foreground: #eff2f5;
+    --primary: #045fe7;
+    --secondary: #563949;
+    --accent: #aa3e13;
   }
-}
+} */
 
 html,
 body {
@@ -17,11 +27,24 @@ body {
 }
 
 body {
-  color: var(--foreground);
+  /* color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  -moz-osx-font-smoothing: grayscale; */
+  /* font-family: 'Yarndings 20 Charted'; */
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 400;
+
+  width: 100%;
+  height: 100vh;
+}
+@keyframes rainbow {
+  0% {
+      background-position: 0% 0%;
+  }
+  100% {
+      background-position: 100% 100%;
+  }
 }
 
 * {

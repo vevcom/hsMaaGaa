@@ -1,0 +1,16 @@
+.totalsbox {
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+.totalsbox > p {
+    font-size: 20px;
+}
+
+.summary {
+    background-color: var(--secondary);
+}
+
+.comparisons {
+    background-color: var(--accent);
+}
