@@ -1,18 +1,21 @@
-import { Call } from "@prisma/client"
 import prisma from "../prisma"
 import {Prisma} from "@prisma/client"
-
-type Data = {
-    name:String
-    distance:Number
-}
+import { Sumana } from "next/font/google"
 
 type UserWithCalls = Prisma.UserGetPayload<{
     include: {calls: true}
 }>
 
-export default async function Graph() {
+export type DataType = {
+    labels: string[];
+    datasets: {
+        label: string;
+        data: number[];
+        // backgroundColor: string[];
+    }[];
+}
 
+export async function getRunningData() {
 
     const users = await prisma.user.findMany({
         select: {
@@ -21,23 +24,18 @@ export default async function Graph() {
         }
     })
 
-    let data:Data[]=[];
+    let userDistances:number[] = users.map(u=> u.calls.reduce((sum,{distance}) => distance+sum,0));
+    let totalDistance:number = userDistances.reduce((sum,item) => sum + item,0);
+    
+    const data = {
+        labels: users.map(u => u.name),
+        datasets: [{
+            label: "Hvor langt har HS-medlemmene gått",
+            data: userDistances,
+            // backgroundColor: [],
+        }]
+    };
 
-
-    let distance:number = 0;
-    let calls:Call[];
-
-
-    for (var i = 0; i<users.length;i++) {
-        distance = 0;
-        calls = users[i].calls;
-        for (var j = 0; j<calls.length;j++) {
-            distance += calls[j].distance;
-        }
-
-        data.push({name:users[i].name,distance:distance});
-    }
-
-    return data;
+    return {data,totalDistance};
 }
 
