@@ -1,10 +1,6 @@
 import prisma from "../prisma"
-import {Prisma} from "@prisma/client"
 import { Sumana } from "next/font/google"
 
-type UserWithCalls = Prisma.UserGetPayload<{
-    include: {calls: true}
-}>
 
 export type DataType = {
     labels: string[];
