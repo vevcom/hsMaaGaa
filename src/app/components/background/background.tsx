@@ -43,10 +43,10 @@ export default function Background() {
                 currentY = 0;
             }
             // if (currentX < 0) {direction = 1}
-            currentX += Math.cos(direction)*3;
-            currentY += Math.sin(direction)*3;
-            setX(Math.floor(currentX));
-            setY(Math.floor(currentY));
+            currentX += Math.cos(direction);
+            currentY += Math.sin(direction);
+            setX(currentX);
+            setY(currentY);
             animationFrameId = requestAnimationFrame(render);
         }
         window.addEventListener('resize',handleResize);
@@ -57,11 +57,13 @@ export default function Background() {
         };
     }, []);
     
+    const timeDelay = Math.floor(-Math.random()*10)
+
     return (
         <><div style={{
             position: "absolute", 
-            left: x,
-            top: y,
+            left: x + "px",
+            top: y + "px",
             textWrap: "nowrap",
             width: boxWidth,
             height: boxHeight
