@@ -1,8 +1,17 @@
 "use server"
+import { createCalls } from "@/app/filldatabase/generateRows";
 import prisma from "../../prisma";
 import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import { env } from "process";
+import { Sumana } from "next/font/google";
+import { distanceBetweenPoints } from "chart.js/helpers";
+import { userDistanceList } from "@/app/dbutils/dbutils";
+
+
+/*Unsure whether to use rfid/username/name in the API-call.
+Have to decide whether we or OV will store the connection between RFID and the users name/username.
+It might be better that we do it, since we have a database. Maybe in connection with Omega Kioleskabet. */
 
 /*
 A Rest API follows approximately the format of:
@@ -12,7 +21,7 @@ content-type: "application/json"
 authorization: API-key
 
 body (This is just JSON-data): {
-username: users username
+user: users username or rfid, not decided yet
 distance: users distance
 }
 */
@@ -21,7 +30,7 @@ const APIKEY = process.env.API_KEY;
 
 
 
-const userData = [{name:"aneand",distance:321},{name:"bjarbj",distance:432},{name:"carlch",distance:543}];
+// const userData = [{name:"aneand",distance:321},{name:"bjarbj",distance:432},{name:"carlch",distance:543}];
 
 export async function GET({request}:{request:NextRequest}) {
     const auth_header = request.headers.get("Authorization");
@@ -33,7 +42,8 @@ export async function GET({request}:{request:NextRequest}) {
     const body = await request.json();
     
     //Not specified user, return all users
-    if (!body.name) {
+    const userData = await userDistanceList();
+    if (!body.user) {
         return NextResponse.json(userData);
     }
 
@@ -47,19 +57,12 @@ export async function GET({request}:{request:NextRequest}) {
 
     //Could not find user
     if (!user) {
-        return NextResponse.json({error:"Could not find user"},{status:400});
+        return NextResponse.json({error:"Could not find user",data:userData},{status:200});
     }
 
     //Found user, returning data
     return NextResponse.json({name:body.user,distance:user.calls.reduce((sum,{distance})=>sum+distance,0)});
 
-
-    
-
-
-
-
-    return NextResponse.json({data:userData});
 }
 
 export async function POST({request}:{request:NextRequest}) {
@@ -77,14 +80,17 @@ export async function POST({request}:{request:NextRequest}) {
         return NextResponse.json({error:"Missing or invalid fields."},{status:400})
     }
 
-    const checkUser = await prisma.user.findUnique({
+    const specifiedUser = await prisma.user.findUnique({
         where:{username:body.user},
-        select:{calls:true}
+        select:{
+            calls:true,
+            name:true,
+        }
     });
 
     // User not found
-    if (!checkUser) {
-        return NextResponse.json({error:"User not found"},{status:400});
+    if (!specifiedUser) {
+        return NextResponse.json({error:"User not found"},{status:404});
     }
 
     await prisma.call.create({
@@ -94,8 +100,8 @@ export async function POST({request}:{request:NextRequest}) {
         }
     });
 
-    let totalDistance = checkUser.calls.reduce((sum,{distance})=>sum+distance,0);
+    let totalDistance = specifiedUser.calls.reduce((sum,{distance})=>sum+distance,0);
     totalDistance += body.distance;
 
-    return NextResponse.json({message:"Successfull post",data:{name:body.name,distance:totalDistance}},{status:201});
+    return NextResponse.json({message:"Successfull post",data:{name:specifiedUser.name,distance:totalDistance}},{status:201});
 }
