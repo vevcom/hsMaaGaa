@@ -41,13 +41,13 @@ export async function GET({request}:{request:NextRequest}) {
     }
     const body = await request.json();
     
-    //Not specified user, return all users
+    //Not specified user, return all user data
     const userData = await userDistanceList();
     if (!body.user) {
         return NextResponse.json(userData);
     }
 
-    //Else, try to find specified user
+    //Try to find the specified user
     const user = await prisma.user.findUnique({
         where:{
             username:body.user
@@ -55,7 +55,7 @@ export async function GET({request}:{request:NextRequest}) {
         select:{calls:true}
     });
 
-    //Could not find user
+    //Could not find user, return all user data
     if (!user) {
         return NextResponse.json({error:"Could not find user",data:userData},{status:200});
     }
@@ -80,19 +80,20 @@ export async function POST({request}:{request:NextRequest}) {
         return NextResponse.json({error:"Missing or invalid fields."},{status:400})
     }
 
-    const specifiedUser = await prisma.user.findUnique({
+    // Check if user exists
+    const checkForUser = await prisma.user.findUnique({
         where:{username:body.user},
         select:{
-            calls:true,
             name:true,
         }
     });
 
     // User not found
-    if (!specifiedUser) {
+    if (!checkForUser) {
         return NextResponse.json({error:"User not found"},{status:404});
     }
 
+    // User found => create new call
     await prisma.call.create({
         data: {
             distance:body.distance,
@@ -100,8 +101,19 @@ export async function POST({request}:{request:NextRequest}) {
         }
     });
 
-    let totalDistance = specifiedUser.calls.reduce((sum,{distance})=>sum+distance,0);
-    totalDistance += body.distance;
+    // Load the updated user with call list
+    const specifiedUser = await prisma.user.findUnique({
+        where:{username:body.user},
+        select:{
+            calls:true,
+            name:true,
+        },
+    });
+    // Only necessary because of VScode
+    if (!specifiedUser){return NextResponse.json({error:"User not found"},{status:404});}
 
+    let totalDistance = specifiedUser.calls.reduce((sum,{distance})=>sum+distance,0);
+
+    // Return updated user and distance
     return NextResponse.json({message:"Successfull post",data:{name:specifiedUser.name,distance:totalDistance}},{status:201});
 }
