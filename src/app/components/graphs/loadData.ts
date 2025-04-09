@@ -1,4 +1,4 @@
-import prisma from "../prisma"
+import prisma from "../../prisma"
 import { Sumana } from "next/font/google"
 
 
@@ -16,7 +16,7 @@ export async function getRunningData() {
     const users = await prisma.user.findMany({
         select: {
             calls: true,
-            name: true,
+            firstName: true,
         }
     })
 
@@ -24,7 +24,7 @@ export async function getRunningData() {
     let totalDistance:number = userDistances.reduce((sum,item) => sum + item,0);
     
     const data = {
-        labels: users.map(u => u.name),
+        labels: users.map(u => u.firstName),
         datasets: [{
             label: "Hvor langt har HS-medlemmene gått",
             data: userDistances,
