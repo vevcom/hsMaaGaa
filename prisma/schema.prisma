@@ -11,14 +11,15 @@ generator client {
 model Call {
     distance Int
     timestamp DateTime @id @default(now())
-    username String
-    user User @relation(fields: [username], references: [username])
+    rfid String
+    user User @relation(fields: [rfid], references: [rfid])
 }
 
 model User {
-    username String @id
-    name String 
-    rfid String 
+    username String
+    firstName String 
+    lastName String 
+    rfid String @id
     calls Call[]
 
 }
