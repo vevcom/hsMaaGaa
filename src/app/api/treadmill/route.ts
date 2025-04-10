@@ -24,9 +24,6 @@ distance: users distance
 const APIKEY = process.env.API_KEY;
 
 
-
-// const userData = [{name:"aneand",distance:321},{name:"bjarbj",distance:432},{name:"carlch",distance:543}];
-
 export async function GET({request}:{request:NextRequest}) {
     const auth_header = request.headers.get("Authorization");
 
@@ -48,9 +45,9 @@ export async function GET({request}:{request:NextRequest}) {
             rfid:body.rfid
         },
         select:{
+            firstname:true,
+            lastname:true,
             username:true,
-            firstName:true,
-            lastName:true,
             calls:true}
     });
 
@@ -60,7 +57,7 @@ export async function GET({request}:{request:NextRequest}) {
     }
 
     //Found user, returning data
-    return NextResponse.json({firstName:user.firstName,lastName:user.lastName,username:user.username,distance:user.calls.reduce((sum,{distance})=>sum+distance,0)});
+    return NextResponse.json({firstname:user.firstname,lastname:user.lastname,username:user.username,distance:user.calls.reduce((sum,{distance})=>sum+distance,0)});
 
 }
 
@@ -93,7 +90,7 @@ export async function POST({request}:{request:NextRequest}) {
         const userToBeCreated = await verifyRFID(body.rfid);
 
         if(userToBeCreated) {
-            const createdUser = await createUser(userToBeCreated.firstName,userToBeCreated.lastName,userToBeCreated.username,userToBeCreated.rfid);
+            const createdUser = await createUser(userToBeCreated.firstname,userToBeCreated.lastname,userToBeCreated.username,userToBeCreated.rfid);
             if (!createdUser) {
                 return NextResponse.json({error:`Error creating user rfid:${body.rfid} . Please notify Vevcom.`},{status:500});
             }
@@ -110,5 +107,5 @@ export async function POST({request}:{request:NextRequest}) {
     if (!updatedUser){return NextResponse.json({error:"User not found"},{status:404});}
 
     // Return updated user and distance
-    return NextResponse.json({message:"Successfull post",data:{firstName:updatedUser.firstName,lastName:updatedUser.lastName,username:updatedUser.username,distance:updatedUser.distance}},{status:201});
+    return NextResponse.json({message:"Successfull post",data:{firstname:updatedUser.firstname,lastname:updatedUser.lastname,username:updatedUser.username,distance:updatedUser.distance}},{status:201});
 }
