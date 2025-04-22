@@ -21,7 +21,7 @@ export default async function Home() {
       <Background /><Background /><Background /><Background />
       <Background /><Background /><Background /><Background />
       <div className={styles.page}>
-        <h1>HS må gå?</h1>
+        <h1>HS må gå!</h1>
         <Totals distanceMeters={totalDistance} />
         <BarGraph Data={data}></BarGraph>
       </div>
