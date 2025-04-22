@@ -9,14 +9,14 @@ export async function userDistanceList() {
 
     const userList = await prisma.user.findMany({
         select:{
+            firstname:true,
+            lastname:true,
             username:true,
-            firstName:true,
-            lastName:true,
             calls:true,
         }
     });
 
-    const userMap = userList.map(user => ({firstName:user.firstName,lastName:user.lastName,distance:user.calls.reduce((sum,{distance})=>sum+distance,0)}));
+    const userMap = userList.map(user => ({firstname:user.firstname,lastname:user.lastname,username:user.username,distance:user.calls.reduce((sum,{distance})=>sum+distance,0)}));
 
     return userMap;
 }
@@ -29,8 +29,8 @@ export async function userDistance(rfid:string){
         select:{
             calls:true,
             username:true,
-            firstName:true,
-            lastName:true,
+            firstname:true,
+            lastname:true,
         },
     });
 
@@ -39,17 +39,17 @@ export async function userDistance(rfid:string){
 
     let totalDistance = specifiedUser.calls.reduce((sum,{distance})=>sum+distance,0);
 
-    return {firstName:specifiedUser.firstName,lastName:specifiedUser.lastName,username:specifiedUser.username,distance:totalDistance};
+    return {firstname:specifiedUser.firstname,lastname:specifiedUser.lastname,username:specifiedUser.username,distance:totalDistance};
 }
 
-export async function createUser(firstName:string,lastName:string,username:string,rfid:string) {
+export async function createUser(firstname:string,lastname:string,username:string,rfid:string) {
     /*Creates a user with the given info. */
     await prisma.user.create({
         data:{
-            rfid:rfid,
+            firstname:firstname,
+            lastname:lastname,
             username:username,
-            firstName:firstName,
-            lastName:lastName,
+            rfid:rfid,
         }
     });
     const user = await prisma.user.findUnique({

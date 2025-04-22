@@ -6,13 +6,13 @@
 
 // Still need to add API key to veven.
 
-const HSlist:{username:string,firstName:string,lastName:string}[] = [
-    {username:"espenjb",firstName:"Espen",lastName:"Johnsen Bentdal"},
-    {username:"livske",firstName:"Liv",lastName:"Skeie"},
-    {username:"sondraar",firstName:"Sondre",lastName:"Aarli"},
-    {username:"matildew",firstName:"Matilde",lastName:"Welle-Gleditsch"},
-    {username:"kaherrev",firstName:"Kristian Albert Fuglestad",lastName:"Herrevold"},
-    {username:"noahm",firstName:"Noah",lastName:"Mikkelsen"}
+const HSlist:{username:string,firstname:string,lastname:string}[] = [
+    {username:"espenjb",firstname:"Espen",lastname:"Johnsen Bentdal"},
+    {username:"livske",firstname:"Liv",lastname:"Skeie"},
+    {username:"sondraar",firstname:"Sondre",lastname:"Aarli"},
+    {username:"matildew",firstname:"Matilde",lastname:"Welle-Gleditsch"},
+    {username:"kaherrev",firstname:"Kristian Albert Fuglestad",lastname:"Herrevold"},
+    {username:"noahm",firstname:"Noah",lastname:"Mikkelsen"}
 ];
 
 export async function verifyRFID({rfid}:{rfid:string}) {
@@ -47,7 +47,7 @@ export async function verifyRFID({rfid}:{rfid:string}) {
     const userData = await (await fetch(url)).json();
     for (let i = 0; i<HSlist.length;i++) {
         if (HSlist[i].username==userData.User.username){
-            return {firstName:userData.User.firstName,lastName:userData.User.lastName,username:userData.username,rfid:rfid};
+            return {firstname:userData.User.firstname,lastname:userData.User.lastname,username:userData.username,rfid:rfid};
         }
     }
     return null;

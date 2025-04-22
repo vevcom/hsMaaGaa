@@ -17,8 +17,8 @@ model Call {
 
 model User {
     username String
-    firstName String 
-    lastName String 
+    firstname String 
+    lastname String 
     rfid String @id
     calls Call[]
 
