@@ -17,11 +17,15 @@ export default function Totals({ distanceMeters } : types) {
                 <Comparison 
                 compareFrom={distanceMeters} 
                 compareTo={10}
-                name="turer til døra" />
+                name="turer mellom OV og Lophtet" />
                 <Comparison 
                 compareFrom={distanceMeters}
                 compareTo={1000}
                 name="butikkturer" />
+                <Comparison 
+                compareFrom={distanceMeters}
+                compareTo={1600}
+                name="beer miles" />
                 <Comparison
                 compareFrom={distanceMeters}
                 compareTo={42195}

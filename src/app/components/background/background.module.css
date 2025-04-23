@@ -5,6 +5,7 @@
   animation: bgColor 50s infinite linear;
   border-radius: 100%;
   text-align: center;
+  color: white;
   z-index: -1;
 }
 .hsMaGaText:nth-of-type(1) {animation-delay: -1s}
@@ -48,6 +49,9 @@
 .hsMaGaText:nth-of-type(39) {animation-delay:-39s}
 .hsMaGaText:nth-of-type(40) {animation-delay:-40s}
 @keyframes bgColor {
+  0% {
+    background-color: #f3f5f7;
+  }
   10% {
     background-color: #a43535;
   }
@@ -74,6 +78,9 @@
   }
   90% {
     background-color: #f3bbff;
+  }
+  100% {
+    background-color: #f3f5f7;
   }
 }
 
