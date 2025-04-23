@@ -1,3 +1,4 @@
+import Stretchgoals from "../stretchgoals/stretchgoals"
 import Comparison from "./comparison"
 import styles from "./totals.module.css"
 
@@ -9,7 +10,7 @@ export default function Totals({ distanceMeters } : types) {
     return (<div>
         <div className={`${styles.totalsbox} ${styles.summary}`}>
             <p>HS har gått: {distanceMeters} meter</p>
-            <p>LEGG INN GRAF TIL NESTE MÅL</p>
+            <Stretchgoals totalDistance={distanceMeters}></Stretchgoals>
         </div>
         <div className={`${styles.totalsbox} ${styles.comparisons}`}>
             <p>Det tilsvarer:</p>
