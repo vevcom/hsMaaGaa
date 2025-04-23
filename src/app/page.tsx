@@ -5,6 +5,8 @@ import Background from "./components/background/background";
 import BarGraph from "./components/graphs/graph";
 import { getRunningData } from "./components/graphs/loadData";
 
+export const dynamic = 'force-dynamic';
+
 export default async function Home() {
   const {data,totalDistance} = await getRunningData();
 

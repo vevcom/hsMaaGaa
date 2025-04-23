@@ -1,0 +1,50 @@
+services:
+  database:
+    image: postgres
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+  nginx:
+    image: nginx:1.27.4-alpine
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+      - 42069:42069
+    environment:
+      DOMAIN: ${DOMAIN}
+      PROXY_PASS: 'hsmaagaa:3000'
+    depends_on:
+      - hsmaagaa
+    volumes:
+      - ./services/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./services/nginx/default.conf:/etc/nginx/templates/default.conf.template:ro
+      - ./certs/conf:/etc/letsencrypt:ro
+      - ./certs/www/:/var/www/certbot:ro
+
+  certbot:
+    image: certbot/certbot:latest
+    volumes:
+      - ./certs/www:/var/www:rw
+      - ./certs/conf:/etc/letsencrypt:rw
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 14d & wait $${!}; done;'"
+    restart: always
+  hsmaagaa:
+    build: .
+    environment:
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_NAME: ${DB_NAME}
+      DATABASE_URL: ${DATABASE_URL}
+      API_KEY_OV: ${API_KEY_OV}
+      API_KEY_VEV: ${API_KEY_VEV}
+      VEV_PROTOCOL: ${VEV_PROTOCOL}
+      VEV_HOSTNAME: ${VEV_HOSTNAME}
+      DOMAIN: ${DOMAIN}
+    depends_on:
+      - database

@@ -10,8 +10,11 @@
   },
   "dependencies": {
     "@prisma/client": "^6.5.0",
+    "certbot": "^5.0.3",
     "chart.js": "^4.4.8",
+    "dotenv": "^16.5.0",
     "next": "15.2.4",
+    "nginx": "^1.1.0",
     "prisma": "^6.5.0",
     "react": "^19.0.0",
     "react-chartjs-2": "^5.3.0",

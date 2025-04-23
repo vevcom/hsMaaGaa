@@ -1,3 +1,4 @@
+'use server'
 import prisma from "../../prisma"
 import { Sumana } from "next/font/google"
 
