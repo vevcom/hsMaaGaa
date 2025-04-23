@@ -23,7 +23,7 @@ export default function BarGraph({Data}:{Data:DataType}) {
 
 
     return <div className={style.graphBackground}>
-        <div className={style.graphTitle}>Hvor langt har HS EGENTLIG gått?</div>
+        <div className={style.graphTitle}>Hvor langt har HS' medlemmer EGENTLIG gått?</div>
         <Bar data={Data}></Bar>
         </div>
 }

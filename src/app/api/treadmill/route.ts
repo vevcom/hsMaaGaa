@@ -1,8 +1,8 @@
 "use server"
 import prisma from "../../prisma";
 import { NextRequest, NextResponse } from "next/server";
-import { createCall, createUser, userDistance, userDistanceList } from "@/app/dbutils/dbutils";
-import { verifyRFID } from "@/app/lib/verify";
+import { createCall, createUser, userDistance, userDistanceList } from "@/app/utilities/dbutils";
+import { verifyRFID } from "@/app/utilities/verify";
 
 
 /*Will use rfid in the API-call, and then we make an API-call to Veven to verify the identity of the user.
