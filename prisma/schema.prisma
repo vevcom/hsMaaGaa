@@ -1,14 +1,25 @@
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
 model Call {
     distance Int
     timestamp DateTime @id @default(now())
-    username String
-    user User @relation(fields: [username], references: [username])
+    rfid String
+    user User @relation(fields: [rfid], references: [rfid])
 }
 
 model User {
-    username String @id
-    name String 
-    rfid String 
+    username String
+    firstname String 
+    lastname String 
+    rfid String @id
     calls Call[]
 
 }
